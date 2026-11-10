@@ -1,0 +1,2 @@
+import {resources,grades,pathFor,subjectsFor} from '../lib/content.mjs';
+export function GET(){const paths=['/','/about/',...grades.map(g=>`/class-${g}/`),...grades.flatMap(g=>subjectsFor(g).map(s=>`/class-${g}/${s.slug}/`)),...resources.filter(r=>!r.sample).map(pathFor)];return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map(p=>`<url><loc>https://onlinesir.in${p}</loc></url>`).join('')}</urlset>`,{headers:{'Content-Type':'application/xml'}});}

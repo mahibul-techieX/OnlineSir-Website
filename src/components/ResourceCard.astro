@@ -1,0 +1,6 @@
+---
+import Icon from './Icon.astro';
+import {pathFor,asNumber} from '../lib/content.mjs';
+const {resource:r}=Astro.props;
+---
+<a class="resource-card" href={pathFor(r)}><div class={`resource-cover ${r.subject}`}><span class="cover-label">{r.subjectTitle}</span><Icon name="book" size={58}/><span class="cover-class">শ্ৰেণী {asNumber(r.grade)}</span><div class="cover-lines" aria-hidden="true"></div></div><div class="resource-body"><div class="card-meta"><span>{r.type==='solution'?'সমাধান':'পাঠৰ টোকা'}</span>{r.sample && <span class="sample-label">নমুনা</span>}</div><h3>{r.title}</h3><p>{r.description}</p><div class="card-bottom"><span>শ্ৰেণী {asNumber(r.grade)} · {r.edition}</span><Icon name="arrow" size={19}/></div></div></a>

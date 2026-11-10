@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.astro/
+.wrangler/
+.env
+.env.*
+!.env.example
+.dev.vars
+worker/.dev.vars
+test-results/
+playwright-report/
+artifacts/

@@ -1,0 +1,33 @@
+{
+  "name": "onlinesir",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview --host 127.0.0.1",
+    "api:dev": "wrangler dev --config worker/wrangler.local.jsonc --ip 127.0.0.1 --port 8787",
+    "db:init": "wrangler d1 migrations apply onlinesir --local --config worker/wrangler.local.jsonc",
+    "content:export": "node scripts/export-content.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:e2e": "playwright test",
+    "start:local": "node scripts/start-local.mjs",
+    "seed:local": "node scripts/seed-local.mjs",
+    "publisher": "node scripts/publisher.mjs"
+  },
+  "dependencies": {
+    "@fontsource/noto-sans-bengali": "^5.2.0",
+    "astro": "^7.4.8",
+    "fflate": "^0.8.3",
+    "jose": "^6.1.0",
+    "marked": "^17.0.0",
+    "sanitize-html": "^2.17.0",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "pagefind": "^1.4.0",
+    "wrangler": "^4.50.0"
+  }
+}

@@ -1,0 +1,5 @@
+LOCAL_DEVELOPMENT=true
+APP_ORIGIN=http://127.0.0.1:4321
+# Production never uses LOCAL_DEVELOPMENT. Configure Access + OWNER_EMAIL.
+# RELEASE_EXPORT_TOKEN=<generate a random secret for production build exports>
+# DEPLOY_HOOK=<Cloudflare Pages build hook, optional>

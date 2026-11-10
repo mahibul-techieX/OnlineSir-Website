@@ -1,0 +1,18 @@
+---
+import '../styles/global.css';
+import '@fontsource/noto-sans-bengali/400.css';
+import '@fontsource/noto-sans-bengali/500.css';
+import '@fontsource/noto-sans-bengali/600.css';
+import '@fontsource/noto-sans-bengali/700.css';
+import Icon from '../components/Icon.astro';
+import {siteSettings} from '../lib/content.mjs';
+const { title='অসমীয়া মাধ্যমৰ শিক্ষাৰ সহযাত্ৰী', description='OnlineSir — পঞ্চমৰ পৰা দশম শ্ৰেণীলৈ অসমীয়া মাধ্যমৰ পাঠভিত্তিক টোকা আৰু সমাধান।', noindex=false }=Astro.props;
+const active=Astro.url.pathname;
+---
+<!doctype html><html lang="as"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><title>{title} | {siteSettings.siteName}</title><link rel="icon" type="image/png" href="/brand/favicon.png"/><link rel="canonical" href={new URL(active,Astro.site)}/>{noindex && <meta name="robots" content="noindex,nofollow"/>}<meta name="theme-color" content="#002860"/></head><body>
+<a class="skip-link" href="#main">মূল বিষয়লৈ যাওক</a>
+<div class="topline"><div class="container"><span>{siteSettings.tagline}</span><span>শ্ৰেণী ৫–১০ <span class="top-dot">•</span> বিনামূলীয়া পাঠ সহায়িকা</span></div></div>
+<header class="site-header"><div class="container header-inner"><a href="/" class="brand" aria-label="OnlineSir — মুখ্য পৃষ্ঠা"><img src="/brand/logo.webp" alt="OnlineSir" width="2172" height="724"/></a><nav aria-label="মূল নেভিগেচন"><a href="/" aria-current={active==='/'?'page':undefined}>মুখ্য পৃষ্ঠা</a><a href="/#classes">শ্ৰেণীসমূহ</a><a href="/search/" aria-current={active==='/search/'?'page':undefined}>টোকা আৰু সমাধান</a><a href="/about/" aria-current={active==='/about/'?'page':undefined}>আমাৰ বিষয়ে</a></nav><a class="header-search" href="/search/" aria-label="পাঠ বিচাৰক"><Icon name="search"/></a></div></header>
+<main id="main">{siteSettings.announcement && <div class="notice container">{siteSettings.announcement}</div>}<slot/></main>
+<footer><div class="container footer-grid"><div><a href="/" class="brand"><img src="/brand/logo.webp" alt="OnlineSir" width="2172" height="724" loading="lazy"/></a><p>নিজৰ ভাষাত শিকোঁ।<br/>আত্মবিশ্বাসেৰে আগবাঢ়োঁ।</p></div><div><h3>শিকিবলৈ আৰম্ভ কৰক</h3><a href="/#classes">আপোনাৰ শ্ৰেণী বাছক</a><a href="/search/">টোকা আৰু সমাধান</a><a href="/saved/">সাঁচি থোৱা পাঠ</a></div><div><h3>OnlineSir</h3><a href="/about/">আমাৰ বিষয়ে</a><a href="/privacy/">গোপনীয়তা</a><a href="/admin/">সম্পাদকৰ প্ৰৱেশ</a></div><div class="footer-note"><Icon name="book" size={28}/><p>সকলোৰে বাবে সহজ শিক্ষা।<br/>এটা এটা পাঠেৰে আগুৱাই যাওঁ।</p></div></div><div class="container footer-bottom"><span>© {new Date().getFullYear()} OnlineSir. শিক্ষাৰ বাবে, সকলোৰে বাবে।</span><span>স্বতন্ত্ৰ শিক্ষামূলক প্ৰয়াস</span></div></footer>
+</body></html>
