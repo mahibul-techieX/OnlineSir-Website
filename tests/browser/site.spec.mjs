@@ -6,7 +6,14 @@ test('browse, search, read and bookmark on desktop',async({page})=>{
  await page.locator('#save-resource').click();await expect(page.locator('#save-resource')).toHaveAttribute('aria-pressed','true');
  await page.goto('/saved/');await expect(page.locator('.saved-item')).toHaveCount(1);
  await page.goto('/search/?q=fractions');await expect(page.locator('[data-search]:visible')).toHaveCount(1);
+ await page.locator('#query').fill('চাৰিটা');await expect(page.locator('.resource-card[href*=fractions]')).toBeVisible();
+ await page.locator('#grade-filter').selectOption('10');await expect(page.locator('#no-results')).toBeVisible();
+ await page.locator('#grade-filter').selectOption('6');await expect(page.locator('.resource-card[href*=fractions]')).toBeVisible();
  await page.locator('#query').fill('no-such-lesson');await expect(page.locator('#no-results')).toBeVisible();
+});
+test('textbooks link to edition chapters and contact uses the official email',async({page})=>{
+ await page.goto('/class-10/mathematics/');await page.locator('.subject-card').first().click();await expect(page).toHaveURL(/\/books\//);await expect(page.locator('.resource-card[href*=real-numbers]')).toBeVisible();
+ await page.goto('/contact/');await expect(page.locator('a[href^="mailto:"]')).toHaveAttribute('href',/support\.onlinesir@gmail\.com/);
 });
 test('mobile layout fits the viewport',async({page})=>{
  await page.setViewportSize({width:390,height:844});await page.goto('/');

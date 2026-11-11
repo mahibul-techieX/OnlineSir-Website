@@ -5,6 +5,7 @@ dist/
 .env
 .env.*
 !.env.example
+!.env.production.example
 .dev.vars
 worker/.dev.vars
 test-results/

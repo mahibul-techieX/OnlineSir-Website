@@ -1,5 +1,7 @@
 LOCAL_DEVELOPMENT=true
 APP_ORIGIN=http://127.0.0.1:4321
-# Production never uses LOCAL_DEVELOPMENT. Configure Access + OWNER_EMAIL.
-# RELEASE_EXPORT_TOKEN=<generate a random secret for production build exports>
-# DEPLOY_HOOK=<Cloudflare Pages build hook, optional>
+AUTH_MODE=password
+OWNER_EMAIL=support.onlinesir@gmail.com
+# Configure ADMIN_USERNAME, ADMIN_PASSWORD_HASH, ADMIN_PASSWORD_SALT and
+# ADMIN_PASSWORD_PEPPER locally; never commit actual values.
+# See docs/AUTHENTICATION.md. Production uses Cloudflare Worker secrets.

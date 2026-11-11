@@ -11,7 +11,7 @@ npm ci
 npm run start:local
 ```
 
-This applies local migrations and starts the website, D1/media emulator and publishing worker. Open `http://127.0.0.1:4321/admin/`. Stop with Ctrl+C. Local development uses an owner identity on loopback only. It creates no paid storage subscription. `worker/wrangler.local.jsonc` is exclusively for local development; production uses `worker/wrangler.jsonc`.
+This applies local migrations and starts the website, D1/media emulator and publishing worker. Open `http://127.0.0.1:4321/admin/`. Stop with Ctrl+C. The admin requires the configured username/password, including on localhost. Password-verifier secrets are stored in the ignored, access-restricted worker/.dev.vars file. It creates no paid storage subscription. `worker/wrangler.local.jsonc` is exclusively for local development; production uses `worker/wrangler.jsonc`.
 
 Optional: `npm run seed:local` adds labelled sample notes, skipping existing slugs.
 
@@ -25,7 +25,7 @@ Optional: `npm run seed:local` adds labelled sample notes, skipping existing slu
 - **Publishing:** prepare an immutable snapshot, publish, follow queued/building/published/failed status, retry, and republish an earlier snapshot to roll back. Archiving removes a note from future releases.
 - **Corrections:** log editorial feedback and resolve/reopen it.
 - **Settings:** site name, tagline, session, contact email and announcement; changes apply with the next release. Supplied logo assets remain unchanged.
-- **Team:** editors write drafts, reviewers approve/publish, owner manages access/settings/backups. Permissions are checked in the API. Production users also require permission in Cloudflare Access.
+- **Team:** editors write drafts, reviewers approve/publish, owner manages access/settings/backups. Permissions are checked in the API. Password mode currently signs in the single configured owner; additional team identities require the optional Cloudflare Access mode.
 - **Backups:** ZIP of database records plus all media. Restore merges missing records without overwriting newer data, then restores missing media under original URLs. Credentials and team access are excluded. Interactive restore limits: 300 MB archive/uncompressed total, 15 MB database manifest, and at most 45 SQL statements. Keep off-device copies.
 - **Activity:** recent editorial audit records.
 
@@ -35,7 +35,7 @@ The local publisher polls a leased queue, exports one release, downloads its ref
 
 Published attachments are public. Archiving does not retract downloaded copies or immediately remove all historical static attachment URLs. The archive action preserves bytes needed by old releases and backups.
 
-Public resource paths remain `/class-N/subject/resource-slug/`; use unique slugs across textbook editions. Separate edition route pages remain a website enhancement. The pilot search UI uses client-side filtering; Pagefind indexes are generated for a later large-library UI switch.
+Public resource paths remain `/class-N/subject/resource-slug/`; use unique slugs across textbook editions. Textbook/edition pages group published chapters. Full-text Pagefind search loads index chunks on demand, with class/type filters and 24-result pagination. Development uses the most recently built index and falls back to metadata if no index exists.
 
 ## Production setup — not connected yet
 
@@ -46,7 +46,7 @@ No paid subscription, repository or public deployment was created by this implem
 3. Connect a private GitHub media repository using `GITHUB_MEDIA_REPO=owner/repository` and secret `GITHUB_MEDIA_TOKEN` restricted to its contents. Production uploads do not require R2. Monitor Git history growth as well as current library size.
 4. Route `/api/*` to the Worker while keeping student reading on static Pages delivery. Configure Pages, custom domain, HTTPS and existing DNS/email records carefully.
 5. Configure random `RELEASE_EXPORT_TOKEN` as a Worker secret. A trusted build runner needs the matching token plus `ADMIN_API_URL`, `CLOUDFLARE_PAGES_PROJECT_NAME`, `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. Scope the token to the intended deployment. Allow machine routes `/api/export*` and `/api/publisher/*` through Access with their Worker bearer-token protection; human admin routes still require Access JWTs.
-6. Run `npm run publisher` in a trusted persistent Node process. It builds the immutable release and deploys with Wrangler Pages, marking success only after the deploy command succeeds. Set Worker `PUBLISH_RUNNER_ENABLED=true` once connected. Running this on your own computer avoids an extra hosting subscription but requires that computer to remain online. Always-on hosted CI is a separate infrastructure choice. An unconfigured production Publish button reports a configuration error.
+6. Run `npm run publisher` in a trusted persistent Node process. It builds the immutable release and deploys with Wrangler Pages, marking success only after the deploy command succeeds. Set Worker `PUBLISH_RUNNER_ENABLED=true` once connected. Running this on your own computer avoids an extra hosting subscription but requires that computer to remain online. Alternatively use the included GitHub Actions workflow described in docs/DEPLOYMENT.md; it runs on demand while your computer is off. An unconfigured production Publish button reports a configuration error.
 7. Supply reviewed educational material, Assamese proofreading, policies and contact details. Verify production login, upload, publishing, backup recovery and rollback before launch.
 
 Secrets belong in provider/environment settings, never source files. `.dev.vars` and `.env` are ignored. Keep downloaded backups private.
@@ -59,3 +59,9 @@ Secrets belong in provider/environment settings, never source files. `.dev.vars`
 - `node scripts/capture-preview.mjs`: screenshots and browser-error/mobile-overflow checks.
 
 Test notes are identifiable and archived. Tests do not deploy externally. Production provider integrations require verification against your accounts.
+
+The confirmed domain is onlinesir.in; support.onlinesir@gmail.com is the configured owner/contact. Run `npm run check:config` to identify missing production settings without printing secret values. See [deployment instructions](docs/DEPLOYMENT.md).
+
+## Password login and equations
+
+Password authentication is now the default. See [authentication setup](docs/AUTHENTICATION.md) for protected credential storage, sessions and production secrets. LaTeX works in note text and imported .txt/.md files: `$x^2$` or `\(x^2\)` inline; `$$\frac{a}{b}$$` or `\[\frac{a}{b}\]` as display equations. Preview uses the same renderer as the published site. Invalid/unsupported expressions show an error instead of stopping publication. The top strip has been removed on all screen sizes.

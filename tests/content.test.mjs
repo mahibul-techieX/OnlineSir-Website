@@ -7,3 +7,13 @@ test('Assamese content and markdown survive rendering',()=>{const html=renderCon
 test('resource validation rejects unsafe URLs and invalid classes',()=>{const sample=resources[0];assert.equal(validateResource(sample).grade,sample.grade);assert.throws(()=>validateResource({...sample,slug:'../../admin'}));assert.throws(()=>validateResource({...sample,grade:11}));assert.throws(()=>validateResource({...sample,body:' '}));});
 test('development bypass is restricted to explicit HTTP loopback configuration',()=>{assert.equal(isLocal(new Request('http://127.0.0.1:8787/api/session'),{LOCAL_DEVELOPMENT:'true'}),true);assert.equal(isLocal(new Request('https://onlinesir.in/api/session'),{LOCAL_DEVELOPMENT:'true'}),false);assert.equal(isLocal(new Request('http://127.0.0.1:8787/api/session'),{}),false);});
 test('public routes are unique and valid',()=>{const paths=resources.map(pathFor);assert.equal(new Set(paths).size,paths.length);for(const p of paths)assert.match(p,/^\/class-\d+\/[a-z0-9-]+\/[a-z0-9-]+\/$/);});
+
+test('LaTeX renders inline and display equations without interpreting code blocks',()=>{
+ for(const source of [String.raw`Inline $x_1^2$`,String.raw`\(\frac{a}{b}\)`,String.raw`$$\sqrt{x}$$`,String.raw`\[x^2\]`])assert.match(renderContent(source),/class="katex"/);
+ assert.match(renderContent(String.raw`$$\frac{a}{b}$$`),/katex-display/);
+ assert.doesNotMatch(renderContent('`$x^2$`'),/class="katex"/);
+ assert.doesNotMatch(renderContent('```tex\n$x^2$\n```'),/class="katex"/);
+ assert.doesNotMatch(renderContent(String.raw`$\href{javascript:alert(1)}{click}$`),/href="javascript:/);
+ assert.doesNotMatch(renderContent('<img src=x onerror=alert(1)> $x^2$'),/onerror/);
+ assert.doesNotThrow(()=>renderContent(String.raw`$\frac{$`));
+});

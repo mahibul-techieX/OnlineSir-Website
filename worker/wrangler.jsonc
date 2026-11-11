@@ -8,7 +8,18 @@
     "APP_ORIGIN": "https://onlinesir.in",
     "ACCESS_TEAM_DOMAIN": "",
     "ACCESS_AUD": "",
-    "OWNER_EMAIL": ""
+    "OWNER_EMAIL": "support.onlinesir@gmail.com",
+    "PUBLISH_RUNNER_ENABLED": "false",
+    "AUTH_MODE": "password",
+    "ADDITIONAL_APP_ORIGIN": "https://onlinesir.pages.dev"
   },
-  "d1_databases": [{"binding":"DB","database_name":"onlinesir","database_id":"00000000-0000-0000-0000-000000000000","migrations_dir":"migrations"}]
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "onlinesir",
+      "database_id": "eaab23fb-e158-4f25-ac0d-2be3e6596b67",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "account_id": "8069225effa25b454a53ec21458b26f0"
 }

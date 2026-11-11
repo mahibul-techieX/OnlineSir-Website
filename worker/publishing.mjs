@@ -38,6 +38,17 @@ export async function publishingRoutes(request,env,user,url,path){
  const publish=path.match(/^\/api\/releases\/([\w-]+)\/publish$/);if(publish&&request.method==='POST'){
   permit(user,'publish');if(!user.local&&env.PUBLISH_RUNNER_ENABLED!=='true')throw new HttpError(503,'Connect the production publishing runner first. Local publishing is ready to use.');const release=await env.DB.prepare('SELECT id FROM releases WHERE id=?').bind(publish[1]).first();if(!release)throw new HttpError(404,'Release not found.');
   const pending=await env.DB.prepare("SELECT id FROM publish_jobs WHERE release_id=? AND status IN ('queued','building')").bind(release.id).first();if(pending)return json({id:pending.id,status:'queued'});
-  const id=crypto.randomUUID();await env.DB.batch([env.DB.prepare('INSERT INTO publish_jobs(id,release_id,created_at,updated_at) VALUES(?,?,?,?)').bind(id,release.id,now(),now()),audit(env,user,'publish-request',release.id)]);return json({id,status:'queued'},202);
+  const id=crypto.randomUUID();await env.DB.batch([env.DB.prepare('INSERT INTO publish_jobs(id,release_id,created_at,updated_at) VALUES(?,?,?,?)').bind(id,release.id,now(),now()),audit(env,user,'publish-request',release.id)]);
+  if(!user.local&&env.GITHUB_PUBLISH_REPO){
+   try{
+    if(!/^[\w.-]+\/[\w.-]+$/.test(env.GITHUB_PUBLISH_REPO)||!env.GITHUB_PUBLISH_TOKEN)throw new Error('Publisher repository or token is missing.');
+    const response=await fetch(`https://api.github.com/repos/${env.GITHUB_PUBLISH_REPO}/actions/workflows/publish.yml/dispatches`,{method:'POST',headers:{Authorization:`Bearer ${env.GITHUB_PUBLISH_TOKEN}`,Accept:'application/vnd.github+json','Content-Type':'application/json','User-Agent':'OnlineSir-publisher'},body:JSON.stringify({ref:env.GITHUB_PUBLISH_BRANCH||'main'}),signal:AbortSignal.timeout(10000)});
+    if(!response.ok)throw new Error(`GitHub rejected the publisher request (${response.status}).`);
+   }catch(error){
+    await env.DB.prepare("UPDATE publish_jobs SET status='failed',message=?,updated_at=? WHERE id=? AND status='queued'").bind('Unable to start GitHub publisher. Check the repository, workflow and Actions token, then retry.',now(),id).run();
+    throw new HttpError(502,'Unable to start GitHub publisher. Check the repository, workflow and Actions token, then retry.');
+   }
+  }
+  return json({id,status:'queued'},202);
  }
 }

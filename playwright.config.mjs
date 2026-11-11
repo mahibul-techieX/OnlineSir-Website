@@ -4,5 +4,5 @@ export default defineConfig({
  fullyParallel:false,
  workers:1,
  reporter:'list',
- use:{baseURL:'http://127.0.0.1:4321',headless:true,channel:'chrome'},
+ use:{baseURL:'http://127.0.0.1:4321',headless:true,channel:'chrome',storageState:process.env.ADMIN_TEST_SESSION?JSON.parse(process.env.ADMIN_TEST_SESSION):undefined},
 });

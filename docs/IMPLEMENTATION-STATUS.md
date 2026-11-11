@@ -1,49 +1,29 @@
-# Implementation status — 10 November 2026
+# Implementation status — 11 November 2026
 
-## Current milestone: functional local admin
+## Implemented and verified locally
 
-The admin now includes persistent notes, autosave, recovery, revisions, duplication, review/approval/archive, curriculum hierarchy, image/PDF uploads, media insertion, settings, corrections, team permissions, audit history and complete ZIP backup/restore.
+- Assamese Classes 5–10 browsing, subjects, textbooks/editions, chapter reading, text notes, print, saved lessons and copy links.
+- Pagefind full-text search with class/type filters, multiword matching and pagination. Only published lessons enter the index; search does not query the admin database.
+- Responsive logo-based navy/green design, 16px base controls, 17–19px reading text and fluid heading sizes.
+- Persistent admin notes, Markdown preview, autosave/recovery, revisions, review/approval, archive, curriculum, image/PDF uploads, settings, corrections, team roles, audit and ZIP backup/restore.
+- Immutable release snapshots, local publication, retries, leases and rollback. Production publisher code and on-demand GitHub Actions workflow are included but not provider-tested.
+- Confirmed official email support.onlinesir@gmail.com configured as contact/admin owner; empty existing contact settings are updated by a migration.
+- Deployment guide, secret-free environment template and configuration readiness checker.
 
-The Publish button now runs a real local build, tracks its result and updates the local website after success. Previous approved content remains published while newer drafts are edited. Older snapshots can be republished for rollback. Publishing jobs have leases, heartbeats and retry handling.
+## Validation
 
-Production Cloudflare/GitHub accounts, Access login, DNS and the production publishing runner still require connection. No paid subscription or public deployment has been created. The runner can operate on the owner's computer at no extra service charge while it is online. See README for configuration and limits.
+16 backend/content tests and 7 Chrome integration tests passed. The browser suite exercised a real local release build and publication. Production build generates 26 pages and a four-lesson search index. Typography checks passed at 360, 390, 768 and 1440px without horizontal overflow.
 
-Separate book/edition public routes and a large-library Pagefind search UI remain website enhancements. Reviewed real lessons and Assamese proofreading remain required. The traffic target has not been load-tested in production.
+## Still required for public launch
 
-## Previous milestone (superseded by the current status above)
+Cloudflare/GitHub account ownership, actual D1/Access settings, scoped secrets, API routing, Pages/domain connection and production smoke tests. No public deployment or paid subscription was created. Real reviewed educational material must replace/extend the four clearly labelled examples; complete textbook coverage is not claimed. 50k monthly visitors remains a design target, not a measured production load result.
 
-The first working local version is available. The long-term project plan remains broader than this initial implementation.
+Backups merge missing data and preserve existing settings; recovering into a preinitialized database requires reviewing the Settings screen. See README.md and DEPLOYMENT.md for operation and limits.
 
-## Working locally
+## Password login and LaTeX update
 
-- Responsive Assamese-first homepage using the provided navy/green branding and optimized original logo assets.
-- Classes 5–10, subject navigation, chapter reading, text notes, search filters, print, bookmarks and copy-link.
-- Four explicitly labelled demonstration notes. Classes without content have honest empty states.
-- Admin editor stores notes in local D1, organizes class/subject/book/edition/chapter metadata, imports/exports text/Markdown and previews sanitized formatting.
-- Draft/review/approved/archive workflow; conflict checks; immutable release snapshots; export-to-static-build command.
-- Owner-only production authentication code validates Cloudflare Access JWTs. Production configuration is intentionally unset and fails closed.
-- Sample notes seeded into the local editor. Browser tests leave their own resources archived; the default list hides archived resources.
+The owner now signs in with a username and password, including locally. Only salted/peppered password-verifier data is stored in the ignored Windows-access-restricted secret file. Expiring session cookies, server-side logout and persistent login attempt limits are tested. Production still requires the verifier secrets to be placed in Cloudflare Worker secrets. LaTeX inline/display equations render through the same safe KaTeX pipeline in published pages and admin previews. The top strip is removed on desktop and mobile. The production build and all seven authenticated browser regression tests passed.
 
-## Verified
+## Initial live deployment
 
-- Production static build: 21 HTML pages plus sitemap and Pagefind index.
-- Five unit tests pass (sanitization, Assamese rendering, validation, local authentication boundary, routes).
-- Three browser tests pass (browsing/search/bookmark, mobile overflow, persistent admin/review/release workflow).
-- Integration checks reject stale versions and cross-origin writes; exported release content survives later archival unchanged.
-- Desktop screenshots reviewed; 390px mobile website and admin fit the viewport; no uncaught browser errors in capture runs.
-- Dependency installation audit reported zero vulnerabilities after upgrading to Astro 7.4.8 and sharp 0.35.5.
-
-## Remaining before a full public launch
-
-- Actual Cloudflare/GitHub accounts, domain/DNS, production D1, Access owner identity and deployed Worker routing.
-- Real reviewed notes, official curriculum inventory, Assamese proofreading, contact details and final policies.
-- End-to-end automated publish/deployment tracking; backup scheduling and restore drill.
-- PDF/image media uploads, multi-user permissions, full curriculum ordering/management, editor autosave, structured question editor and book/edition-specific URLs.
-- Connect the generated Pagefind index to the search UI for a large library; the pilot currently uses a small client-side full-text filter.
-- Measured load/performance testing before claiming capacity at 50,000 monthly visitors. The current static design targets that traffic, but no production traffic test has been performed.
-
-## Start
-
-Run `npm run start:local` from the project folder. Website: `http://127.0.0.1:4321/`. Admin: `http://127.0.0.1:4321/admin/`. Detailed operation and production checklist: `README.md`.
-
-No website has been deployed publicly and no paid service has been enabled.
+Deployed 11 November 2026 to https://onlinesir.pages.dev. Cloudflare Pages connects to the private admin Worker through the ADMIN service binding; D1 migrations and encrypted authentication secrets are installed. Live homepage returned 200, anonymous admin access 401, owner login/dashboard 200, and revoked-session access 401. Four labelled sample lessons are initialized in production D1. onlinesir.in remains at GoDaddy and requires Cloudflare domain/DNS setup. Media uploads and automatic publishing are deliberately unavailable until their GitHub credentials and repositories are connected.

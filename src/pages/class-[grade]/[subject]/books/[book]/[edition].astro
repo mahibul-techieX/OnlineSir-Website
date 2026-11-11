@@ -1,0 +1,10 @@
+---
+import Layout from '../../../../../layouts/Layout.astro';
+import ResourceCard from '../../../../../components/ResourceCard.astro';
+import {resources,asNumber} from '../../../../../lib/content.mjs';
+import {booksFor,bookKey,editionKey} from '../../../../../lib/catalog.mjs';
+export function getStaticPaths(){return booksFor(resources).map(r=>({params:{grade:String(r.grade),subject:r.subject,book:bookKey(r),edition:editionKey(r)},props:{book:r}}));}
+const {book}=Astro.props;
+const chapters=resources.filter(r=>r.grade===book.grade&&r.subject===book.subject&&r.book===book.book&&r.edition===book.edition);
+---
+<Layout title={`${book.book} · ${book.edition}`}><div class="container page-section"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">মুখ্য পৃষ্ঠা</a><span>/</span><a href={`/class-${book.grade}/`}>শ্ৰেণী {asNumber(book.grade)}</a><span>/</span><a href={`/class-${book.grade}/${book.subject}/`}>{book.subjectTitle}</a></nav><div class="page-intro"><div class="eyebrow">{book.subjectTitle} · {book.edition}</div><h1>{book.book}</h1><p>এই সংস্কৰণৰ প্ৰকাশিত পাঠ আৰু টোকাসমূহ।</p></div><div class="resource-grid">{chapters.map(resource=><ResourceCard resource={resource}/>)}</div></div></Layout>

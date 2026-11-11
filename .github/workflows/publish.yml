@@ -1,0 +1,27 @@
+name: Publish OnlineSir
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: onlinesir-production
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run publisher
+        env:
+          PUBLISH_DRAIN: 'true'
+          ADMIN_API_URL: ${{ secrets.ADMIN_API_URL }}
+          RELEASE_EXPORT_TOKEN: ${{ secrets.RELEASE_EXPORT_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_PAGES_PROJECT_NAME: ${{ secrets.CLOUDFLARE_PAGES_PROJECT_NAME }}

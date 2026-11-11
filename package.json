@@ -14,13 +14,15 @@
     "test:e2e": "playwright test",
     "start:local": "node scripts/start-local.mjs",
     "seed:local": "node scripts/seed-local.mjs",
-    "publisher": "node scripts/publisher.mjs"
+    "publisher": "node scripts/publisher.mjs",
+    "check:config": "node scripts/check-config.mjs"
   },
   "dependencies": {
     "@fontsource/noto-sans-bengali": "^5.2.0",
     "astro": "^7.4.8",
     "fflate": "^0.8.3",
     "jose": "^6.1.0",
+    "katex": "^0.19.1",
     "marked": "^17.0.0",
     "sanitize-html": "^2.17.0",
     "sharp": "^0.35.5"

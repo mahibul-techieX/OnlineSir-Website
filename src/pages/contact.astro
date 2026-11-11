@@ -1,0 +1,5 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {siteSettings} from '../lib/content.mjs';
+---
+<Layout title="যোগাযোগ"><div class="container page-section"><div class="page-intro"><div class="eyebrow">OnlineSir</div><h1>আমাৰ সৈতে যোগাযোগ কৰক</h1><p>পাঠৰ ভুল, পৰামৰ্শ অথবা সহায়ৰ বাবে আমালৈ লিখক।</p></div><article class="reading-card prose"><h2>পাঠত ভুল পাইছে?</h2><p>পাঠৰ লিংক, শ্ৰেণী, বিষয় আৰু সংশোধন কৰিবলগীয়া অংশটো ইমেইলত উল্লেখ কৰক।</p>{siteSettings.contactEmail ? <a class="button primary" href={`mailto:${siteSettings.contactEmail}?subject=OnlineSir%20feedback`}>{siteSettings.contactEmail}</a> : <p>যোগাযোগৰ ঠিকনা শীঘ্ৰে যোগ কৰা হ’ব।</p>}<p>ব্যক্তিগত পাছৱৰ্ড অথবা গোপন তথ্য প্ৰেৰণ নকৰিব।</p></article></div></Layout>

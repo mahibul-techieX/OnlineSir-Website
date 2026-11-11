@@ -1,0 +1,80 @@
+/* Shared reading scale: Assamese shaping needs natural spacing and generous leading. */
+:root {
+  --text-caption: .8125rem;
+  --text-small: .875rem;
+  --text-body: 1rem;
+  --text-reading: clamp(1.0625rem, 1rem + .25vw, 1.1875rem);
+  --heading-page: clamp(1.75rem, 1.3rem + 1.8vw, 2.375rem);
+  --heading-section: clamp(1.5rem, 1.2rem + 1vw, 1.875rem);
+}
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { font-size:var(--text-body); line-height:1.8; font-weight:400; }
+body h1, body h2, body h3 { letter-spacing:normal; overflow-wrap:break-word; }
+body h1 { font-weight:700; line-height:1.5; }
+body h2, body h3 { font-weight:600; line-height:1.6; }
+body .hero h1 { font-size:clamp(2.25rem, 1.5rem + 3vw, 3.5rem); letter-spacing:normal; line-height:1.45; }
+body .hero-description, body .page-intro p, body .reading-description { font-size:clamp(1rem,.96rem + .15vw,1.0625rem); line-height:1.9; }
+body .page-intro h1, body .reading-card h1 { font-size:var(--heading-page); }
+body .section-heading h2, body .learning-banner h2 { font-size:var(--heading-section); }
+body .section-heading p, body .learning-banner p { font-size:var(--text-body); line-height:1.85; }
+body .header-inner nav { font-size:var(--text-small); font-weight:500; }
+body .button, body .hero-search button { font-size:var(--text-small); font-weight:600; line-height:1.6; }
+body .hero-search input, body .field input, body .field select, body .field textarea,
+body .search-controls input, body .search-controls select { font-size:1rem; line-height:1.7; }
+body .eyebrow, body .popular, body .quiet-pill, body .topline { font-size:var(--text-caption); line-height:1.7; }
+body .benefits div, body .text-link { font-size:var(--text-small); }
+body .class-card h3 { font-size:1.0625rem; font-weight:600; }
+body .class-link { font-size:var(--text-small); }
+body .class-caption { font-size:.75rem; }
+body .resource-body h3 { font-size:1.125rem; font-weight:600; line-height:1.75; min-height:0; }
+body .resource-body p { font-size:var(--text-small); line-height:1.85; min-height:0; }
+body .card-meta, body .card-bottom, body .cover-class, body .sample-label { font-size:var(--text-caption); }
+body .card-bottom { gap:8px; flex-wrap:wrap; }
+body .sample-disclosure, body .notice, body .feedback, body .breadcrumbs,
+body .reading-meta, body .reader-tip p, body .search-count { font-size:var(--text-small); line-height:1.8; }
+body .reader-nav, body .reader-aside h3, body .back-link { font-size:var(--text-small); }
+body .prose { font-size:var(--text-reading); line-height:1.95; font-weight:400; }
+body .prose h2 { font-size:clamp(1.375rem,1.2rem + .6vw,1.75rem); font-weight:600; margin-top:2rem; }
+body .prose h3 { font-size:clamp(1.1875rem,1.1rem + .4vw,1.375rem); font-weight:600; }
+body .prose strong { font-weight:600; }
+body .prose table { font-size:1rem; line-height:1.8; }
+body .reading-end { font-size:var(--text-small); }
+body .footer-grid p, body .footer-grid>div>a:not(.brand), body .footer-bottom { font-size:var(--text-caption); line-height:1.9; }
+body .footer-grid h3 { font-size:var(--text-small); font-weight:600; }
+/* Editorial controls remain legible even in the denser admin layout. */
+body .studio-top h1 { font-size:var(--heading-section); }
+body .studio-nav nav a, body .studio-view, body .admin-entry,
+body .panel-heading h2, body .field, body .muted, body .data-table,
+body .release-card p, body .revision-card p, body .correction-card small { font-size:var(--text-small); }
+body .studio-user, body .admin-entry small, body .editor-hint, body .editor-meta,
+body .studio-top .eyebrow, body .curriculum-row small, body .media-copy p,
+body .release-status, body .revision-card small, body .stat-card span { font-size:var(--text-caption); line-height:1.75; }
+body .studio .button, body .editor-toolbar button, body .secondary-actions .button,
+body .list-pagination .button, body .media-copy .button, body .curriculum-row .button { font-size:var(--text-small); min-height:44px; }
+body .filter-bar input, body .filter-bar select, body .editor textarea[name=body] { font-size:1rem; }
+body .media-copy h3, body .release-card h3, body .curriculum-row strong { font-size:1rem; font-weight:600; }
+body .editor-toolbar { flex-wrap:wrap; }
+@media(max-width:600px) {
+  body .header-inner nav { gap:8px; flex-wrap:wrap; }
+  body .header-inner nav a { min-height:44px; padding-block:9px; }
+  body .hero-search { flex-wrap:wrap; }
+  body .hero-search input { flex:1; min-width:140px; height:auto; padding-block:8px; }
+  body .resource-card { display:block; }
+  body .resource-cover { height:125px; min-height:0; flex-direction:row; align-items:center; }
+  body .resource-cover>svg { width:48px; height:48px; }
+  body .resource-body { padding:20px; }
+  body .cover-label { font-size:1.375rem; }
+  body .resource-body p { margin-bottom:16px; }
+  body .studio-top { flex-wrap:wrap; }
+  body .studio-user { max-width:100%; text-align:left; overflow-wrap:anywhere; }
+  body .filter-bar input { width:100%; flex-basis:100%; }
+  body .filter-bar select { max-width:100%; flex:1; }
+  body .reader-actions .button { font-size:var(--text-small); }
+}
+@media print {
+  body .prose { font-size:12pt; line-height:1.7; }
+  body .prose h2 { font-size:16pt; }
+  body .prose h3 { font-size:14pt; }
+}
+
+.prose .katex-display{overflow-x:auto;overflow-y:hidden;max-width:100%;padding-block:.4em}.prose .katex{font-size:1.1em}.reader-layout>* ,.reading-card,#note-preview{min-width:0}
